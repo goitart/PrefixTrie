@@ -1,9 +1,7 @@
 //package trie;
 
 import java.util.*;
-
-public class Node {
-    String value;
-    HashMap<Character, Node> child;
-
+class Node {
+    char s;
+    HashMap<Character, Node> subNode = new HashMap<Character, Node>();
 }

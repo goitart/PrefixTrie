@@ -9,19 +9,47 @@
 поиск всех строк в дереве с заданным префиксом.
 */
 //package trie;
+
 import java.util.*;
 
-import java.util.TreeMap;
-
 public class Trie {
-    public static void main(String[] args) {
+//    static class Node {
+//        private boolean isLast;
+//        private Map<Character, Node> subNode = new HashMap<Character, Node>();
+//        char s;
+//
+//        public Node() {
+//            this.s = s;
+//        }
+//
+//        public boolean getIsLast() {
+//            return isLast;
+//        }
+//
+//        public void setIsLast(boolean isLast) {
+//            this.isLast = isLast;
+//        }
+//    }
 
+    private Node root;
+
+    public Trie() {
+        root = new Node();
     }
-    Node root = new Node();
-    public void add(String string) {
-        if (string.isEmpty()){
+
+
+    public void addWord(String word) {
+        Map<Character, Node> subNode = root.subNode;
+        for (int i = 0; i < word.toCharArray().length; i++) {
+
+        }
+        if (word.isEmpty()) {
             return;
         }
-//        if (next == null)
+//        isLast = true;
+    }
+
+
+    public static void main(String[] args) {
     }
 }
