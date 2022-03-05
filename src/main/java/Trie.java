@@ -40,12 +40,13 @@ public class Trie {
 
     public void addWord(String word) {
         Map<Character, Node> subNode = root.subNode;
-        for (int i = 0; i < word.toCharArray().length; i++) {
-
-        }
         if (word.isEmpty()) {
             return;
         }
+        for (int i = 0; i < word.toCharArray().length; i++) {
+
+        }
+
 //        isLast = true;
     }
 
