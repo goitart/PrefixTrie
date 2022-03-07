@@ -11,6 +11,16 @@
 //package trie;
 
 import java.util.*;
+class Node {
+    char letter;
+    HashMap<Character, Node> subNode = new HashMap<Character, Node>();
+    boolean isLast;
+    public Node(char ch){
+        letter = ch;
+        subNode = new HashMap<Character, Node>();
+        isLast = false;
+    }
+}
 
 public class Trie {
 //    static class Node {
@@ -31,23 +41,31 @@ public class Trie {
 //        }
 //    }
 
-    private Node root;
+    Node root;
 
-    public Trie() {
-        root = new Node();
+    Trie() {
+        root = new Node(' ');
     }
 
 
-    public void addWord(String word) {
+    public void addWord(String string) {
+        Node thisNode = root;
         Map<Character, Node> subNode = root.subNode;
-        if (word.isEmpty()) {
+        if (string.isEmpty()) {
             return;
         }
-        for (int i = 0; i < word.toCharArray().length; i++) {
-
+        for (int i = 0; i < string.toCharArray().length; i++) {
+            char ch = string.charAt(i);
+            if (subNode.containsKey(ch)) {
+                thisNode = subNode.get(ch);
+            }
+            else {
+                Node nextNode = new Node(ch);
+                subNode.put(ch, nextNode);
+                thisNode = nextNode;
+            }
         }
-
-//        isLast = true;
+        thisNode.isLast = true;
     }
 
 
