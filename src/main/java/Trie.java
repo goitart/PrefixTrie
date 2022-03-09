@@ -11,36 +11,28 @@
 //package trie;
 
 import java.util.*;
-class Node {
-    char letter;
-    HashMap<Character, Node> subNode = new HashMap<Character, Node>();
-    boolean isLast;
-    public Node(char ch){
-        letter = ch;
-        subNode = new HashMap<Character, Node>();
-        isLast = false;
-    }
-}
+//class Node {
+//    char letter;
+//    HashMap<Character, Node> subNode = new HashMap<Character, Node>();
+//    boolean isLast;
+//    public Node(char ch){
+//        letter = ch;
+//        subNode = new HashMap<Character, Node>();
+//        isLast = false;
+//    }
+//}
 
 public class Trie {
-//    static class Node {
-//        private boolean isLast;
-//        private Map<Character, Node> subNode = new HashMap<Character, Node>();
-//        char s;
-//
-//        public Node() {
-//            this.s = s;
-//        }
-//
-//        public boolean getIsLast() {
-//            return isLast;
-//        }
-//
-//        public void setIsLast(boolean isLast) {
-//            this.isLast = isLast;
-//        }
-//    }
-
+    public static class Node {
+        char letter;
+        HashMap<Character, Node> subNode = new HashMap<Character, Node>();
+        boolean isLast;
+        public Node(char ch){
+            letter = ch;
+            subNode = new HashMap<Character, Node>();
+            isLast = false;
+        }
+    }
     Node root;
 
     Trie() {
@@ -78,16 +70,45 @@ public class Trie {
     }
     public List<String> findWithPrefix(String prefix) {
         Node thisNode = root;
+        String prefixWord = "";
+        List<String> listOfWord = new ArrayList<>();
+        if (prefix.length() == 0) {
+            return null;
+        }
         for (char letter : prefix.toCharArray()) {
             if (!thisNode.subNode.containsKey(letter)) {
                 return null;
+            } else {
+                prefixWord += letter;
+                thisNode = thisNode.subNode.get(letter);
+                if (thisNode.isLast) {
+                    listOfWord.add(prefixWord);
+                }
             }
-
         }
-        return null;
+        return listOfWord;
+    }
+    public void delete(String word) {
+        Node thisNode = root;
+        Map<Character, Node> subNode = root.subNode;
+        if (word.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < word.toCharArray().length; i++) {
+            char letter = word.charAt(i);
+            if (subNode.containsKey(letter)) {
+                thisNode = subNode.get(letter);//поиск по ключу(value) или null
+            }
+            else {
+                Node nextNode = new Node(letter);
+                subNode.put(letter, nextNode);//добавление пары, если такое нет
+                thisNode = nextNode;
+            }
+        }
+        thisNode.isLast = false;
     }
 
 
-    public static void main(String[] args) {
-    }
+//    public static void main(String[] args) {
+//    }
 }
