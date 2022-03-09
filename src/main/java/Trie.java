@@ -57,18 +57,34 @@ public class Trie {
         for (int i = 0; i < string.toCharArray().length; i++) {
             char letter = string.charAt(i);
             if (subNode.containsKey(letter)) {
-                thisNode = subNode.get(letter);
+                thisNode = subNode.get(letter);//поиск по ключу(value) или null
             }
             else {
                 Node nextNode = new Node(letter);
-                subNode.put(letter, nextNode);
+                subNode.put(letter, nextNode);//добавление пары, если такое нет
                 thisNode = nextNode;
             }
         }
         thisNode.isLast = true;
     }
     public boolean findWord(String word) {
+        Node thisNode = root;
+        for (char letter : word.toCharArray()) {
+            if (!thisNode.subNode.containsKey(letter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public List<String> findWithPrefix(String prefix) {
+        Node thisNode = root;
+        for (char letter : prefix.toCharArray()) {
+            if (!thisNode.subNode.containsKey(letter)) {
+                return null;
+            }
 
+        }
+        return null;
     }
 
 
