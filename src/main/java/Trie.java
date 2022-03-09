@@ -55,17 +55,20 @@ public class Trie {
             return;
         }
         for (int i = 0; i < string.toCharArray().length; i++) {
-            char ch = string.charAt(i);
-            if (subNode.containsKey(ch)) {
-                thisNode = subNode.get(ch);
+            char letter = string.charAt(i);
+            if (subNode.containsKey(letter)) {
+                thisNode = subNode.get(letter);
             }
             else {
-                Node nextNode = new Node(ch);
-                subNode.put(ch, nextNode);
+                Node nextNode = new Node(letter);
+                subNode.put(letter, nextNode);
                 thisNode = nextNode;
             }
         }
         thisNode.isLast = true;
+    }
+    public boolean findWord(String word) {
+
     }
 
 
