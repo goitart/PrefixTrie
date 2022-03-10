@@ -11,16 +11,6 @@
 //package trie;
 
 import java.util.*;
-//class Node {
-//    char letter;
-//    HashMap<Character, Node> subNode = new HashMap<Character, Node>();
-//    boolean isLast;
-//    public Node(char ch){
-//        letter = ch;
-//        subNode = new HashMap<Character, Node>();
-//        isLast = false;
-//    }
-//}
 
 public class Trie {
     public static class Node {
@@ -44,13 +34,13 @@ public class Trie {
 
     public void addWord(String string) {
         Node thisNode = root;
-        Map<Character, Node> subNode = root.subNode;
+//        Map<Character, Node> subNode = root.subNode;
         if (string.isEmpty()) {
             return;
         }
         for (int i = 0; i < string.toCharArray().length; i++) {
             char letter = string.charAt(i);
-            if (subNode.containsKey(letter)) {
+            if (thisNode.subNode.containsKey(letter)) {
                 thisNode = thisNode.subNode.get(letter);//поиск по ключу(value) или null
             } else {
                 Node nextNode = new Node(letter);
@@ -68,40 +58,44 @@ public class Trie {
                 return false;
             } else thisNode = thisNode.subNode.get(letter);
         }
-        return true;
+        return thisNode.isLast;
     }
 
     public List<String> findWithPrefix(String prefix) {
         Node thisNode = root;
-        String prefixWord = "";
-        List<String> listOfWord = new ArrayList<>();
+        StringBuilder prefixWord = new StringBuilder();
+        List<String> emptyList = new ArrayList<>();
+        List<String> listOfWords = new ArrayList<>();
         if (prefix.length() == 0) {
-            return null;
+            return listOfWords;
         }
         for (char letter : prefix.toCharArray()) {
-            if (!thisNode.subNode.containsKey(letter)) {
-                return null;
-            } else {
-                prefixWord += letter;
+            if (thisNode.subNode.containsKey(letter)) {
+                prefixWord.append(letter);
+//                String stringWord = prefixWord.toString();
                 thisNode = thisNode.subNode.get(letter);
-                if (thisNode.isLast) {
-                    listOfWord.add(prefixWord);
-                }
+
+            } else {
+                return listOfWords;
             }
         }
-        return listOfWord;
+        if (thisNode.isLast) {
+            String stringWord = prefixWord.toString();
+            listOfWords.add(stringWord);
+        }
+        return listOfWords;
     }
 
     public void delete(String word) {
         Node thisNode = root;
-        Map<Character, Node> subNode = root.subNode;
+//        Map<Character, Node> subNode = root.subNode;
         if (word.isEmpty()) {
             return;
         }
         for (int i = 0; i < word.toCharArray().length; i++) {
             char letter = word.charAt(i);
-            if (subNode.containsKey(letter)) {
-                thisNode = subNode.get(letter);//поиск по ключу(value) или null
+            if (thisNode.subNode.containsKey(letter)) {
+                thisNode = thisNode.subNode.get(letter);//поиск по ключу(value) или null
             } else break;
         }
         thisNode.isLast = false;
