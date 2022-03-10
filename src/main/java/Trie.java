@@ -27,12 +27,14 @@ public class Trie {
         char letter;
         HashMap<Character, Node> subNode = new HashMap<Character, Node>();
         boolean isLast;
-        public Node(char ch){
+
+        public Node(char ch) {
             letter = ch;
             subNode = new HashMap<Character, Node>();
             isLast = false;
         }
     }
+
     Node root;
 
     Trie() {
@@ -49,25 +51,26 @@ public class Trie {
         for (int i = 0; i < string.toCharArray().length; i++) {
             char letter = string.charAt(i);
             if (subNode.containsKey(letter)) {
-                thisNode = subNode.get(letter);//поиск по ключу(value) или null
-            }
-            else {
+                thisNode = thisNode.subNode.get(letter);//поиск по ключу(value) или null
+            } else {
                 Node nextNode = new Node(letter);
-                subNode.put(letter, nextNode);//добавление пары, если такое нет
+                thisNode.subNode.put(letter, nextNode);//добавление пары, если такое нет
                 thisNode = nextNode;
             }
         }
         thisNode.isLast = true;
     }
+
     public boolean findWord(String word) {
         Node thisNode = root;
         for (char letter : word.toCharArray()) {
             if (!thisNode.subNode.containsKey(letter)) {
                 return false;
-            }
+            } else thisNode = thisNode.subNode.get(letter);
         }
         return true;
     }
+
     public List<String> findWithPrefix(String prefix) {
         Node thisNode = root;
         String prefixWord = "";
@@ -88,6 +91,7 @@ public class Trie {
         }
         return listOfWord;
     }
+
     public void delete(String word) {
         Node thisNode = root;
         Map<Character, Node> subNode = root.subNode;
@@ -98,12 +102,7 @@ public class Trie {
             char letter = word.charAt(i);
             if (subNode.containsKey(letter)) {
                 thisNode = subNode.get(letter);//поиск по ключу(value) или null
-            }
-            else {
-                Node nextNode = new Node(letter);
-                subNode.put(letter, nextNode);//добавление пары, если такое нет
-                thisNode = nextNode;
-            }
+            } else break;
         }
         thisNode.isLast = false;
     }
