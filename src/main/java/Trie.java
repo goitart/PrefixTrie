@@ -16,12 +16,12 @@ public class Trie {
 
     public static class Node {
         char letter;
-        HashMap<Character, Node> subNode = new HashMap<Character, Node>();
+        HashMap<Character, Node> subNode;
         boolean isLast;
 
         public Node(char ch) {
             letter = ch;
-            subNode = new HashMap<Character, Node>();
+            subNode = new HashMap<>();
             isLast = false;
         }
     }
@@ -63,13 +63,15 @@ public class Trie {
     }
 
     public void getAllWords(Node thisNode, StringBuilder word, List<String> words) {
-        for (char letter : thisNode.subNode.keySet()) {
-            word.append(letter);
-            getAllWords(thisNode.subNode.get(letter), word, words);
+        for (char s : thisNode.subNode.keySet()) {
+            word.append(s);
+            if (!words.contains(String.valueOf(word)) && thisNode.subNode.get(s).isLast) {
+                words.add(String.valueOf(word));
+            }
+            getAllWords(thisNode.subNode.get(s), word, words);
+            word.deleteCharAt(word.length() - 1);
         }
-        if (!words.contains(String.valueOf(word))) {
-            words.add(String.valueOf(word));
-        }
+
     }
 
     public List<String> findWithPrefix(String prefix) {
@@ -78,7 +80,7 @@ public class Trie {
         List<String> emptyList = new ArrayList<>();
         List<String> listOfWords = new ArrayList<>();
         if (prefix.length() == 0) {
-            return listOfWords;
+            return emptyList;
         }
         for (char letter : prefix.toCharArray()) {
             if (thisNode.subNode.containsKey(letter)) {
@@ -86,7 +88,7 @@ public class Trie {
                 String stringWord = prefixWord.toString();
                 thisNode = thisNode.subNode.get(letter);
             } else {
-                return listOfWords;
+                return emptyList;
             }
         }
         if (thisNode.isLast) {
