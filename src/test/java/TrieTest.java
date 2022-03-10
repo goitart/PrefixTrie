@@ -32,11 +32,11 @@ public class TrieTest {
         newTrie.addWord("dog");
         newTrie.addWord("portal");
         newTrie.addWord("dog");
-        newTrie.addWord("");
+        newTrie.addWord("pop");
         newTrie.addWord("portopit");
 
         assertEquals(newTrie.findWithPrefix("k"), List.of());
-        assertEquals(List.of("port", "portal", "portopit"), newTrie.findWithPrefix("p0"));
+        assertEquals(List.of("port", "portal", "portopit", "pop"), newTrie.findWithPrefix("po"));
     }
     @Test
     void testDelete() {

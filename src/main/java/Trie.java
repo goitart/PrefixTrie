@@ -13,6 +13,7 @@
 import java.util.*;
 
 public class Trie {
+
     public static class Node {
         char letter;
         HashMap<Character, Node> subNode = new HashMap<Character, Node>();
@@ -61,6 +62,16 @@ public class Trie {
         return thisNode.isLast;
     }
 
+    public void getAllWords(Node thisNode, StringBuilder word, List<String> words) {
+        for (char letter : thisNode.subNode.keySet()) {
+            word.append(letter);
+            getAllWords(thisNode.subNode.get(letter), word, words);
+        }
+        if (!words.contains(String.valueOf(word))) {
+            words.add(String.valueOf(word));
+        }
+    }
+
     public List<String> findWithPrefix(String prefix) {
         Node thisNode = root;
         StringBuilder prefixWord = new StringBuilder();
@@ -72,23 +83,25 @@ public class Trie {
         for (char letter : prefix.toCharArray()) {
             if (thisNode.subNode.containsKey(letter)) {
                 prefixWord.append(letter);
-//                String stringWord = prefixWord.toString();
+                String stringWord = prefixWord.toString();
                 thisNode = thisNode.subNode.get(letter);
-
             } else {
                 return listOfWords;
             }
         }
         if (thisNode.isLast) {
-            String stringWord = prefixWord.toString();
-            listOfWords.add(stringWord);
+//            String stringWord = prefixWord.toString();
+//            listOfWords.add(stringWord);
+            listOfWords.add(String.valueOf(prefixWord));
         }
+        getAllWords(thisNode, prefixWord, listOfWords);
         return listOfWords;
     }
 
+
+    // delete удаляет не узлы, а указатель на конец слова
     public void delete(String word) {
         Node thisNode = root;
-//        Map<Character, Node> subNode = root.subNode;
         if (word.isEmpty()) {
             return;
         }
@@ -100,8 +113,4 @@ public class Trie {
         }
         thisNode.isLast = false;
     }
-
-
-//    public static void main(String[] args) {
-//    }
 }
