@@ -12,14 +12,14 @@
 
 import java.util.*;
 
-public class Trie {
+class Trie {
 
     public static class Node {
         char letter;
         HashMap<Character, Node> subNode;
         boolean isLast;
 
-        public Node(char ch) {
+        Node(char ch) {
             letter = ch;
             subNode = new HashMap<>();
             isLast = false;
@@ -35,19 +35,23 @@ public class Trie {
 
     public void addWord(String string) {
         Node thisNode = root;
-//        Map<Character, Node> subNode = root.subNode;
         if (string.isEmpty()) {
             return;
         }
+
         for (int i = 0; i < string.toCharArray().length; i++) {
             char letter = string.charAt(i);
             if (thisNode.subNode.containsKey(letter)) {
-                thisNode = thisNode.subNode.get(letter);//поиск по ключу(value) или null
-            } else {
-                Node nextNode = new Node(letter);
-                thisNode.subNode.put(letter, nextNode);//добавление пары, если такое нет
+                thisNode = thisNode.subNode.get(letter);
+            }
+            else {
+                Node nextNode;
+                thisNode.subNode.putIfAbsent(letter, nextNode = new Node(letter));
                 thisNode = nextNode;
             }
+
+//            Node nextNode;
+
         }
         thisNode.isLast = true;
     }
@@ -62,10 +66,10 @@ public class Trie {
         return thisNode.isLast;
     }
 
-    public void getAllWords(Node thisNode, StringBuilder word, List<String> words) {
+    public void getAllWords(Node thisNode, StringBuilder word, HashSet<String> words) {
         for (char s : thisNode.subNode.keySet()) {
             word.append(s);
-            if (!words.contains(String.valueOf(word)) && thisNode.subNode.get(s).isLast) {
+            if (thisNode.subNode.get(s).isLast) {
                 words.add(String.valueOf(word));
             }
             getAllWords(thisNode.subNode.get(s), word, words);
@@ -74,14 +78,15 @@ public class Trie {
 
     }
 
-    public List<String> findWithPrefix(String prefix) {
+    public HashSet<String> findWithPrefix(String prefix) {
         Node thisNode = root;
         StringBuilder prefixWord = new StringBuilder();
-        List<String> emptyList = new ArrayList<>();
-        List<String> listOfWords = new ArrayList<>();
+        HashSet<String> emptyList = new HashSet<>();
+        HashSet<String> listOfWords = new HashSet<>();
         if (prefix.length() == 0) {
             return emptyList;
         }
+
         for (char letter : prefix.toCharArray()) {
             if (thisNode.subNode.containsKey(letter)) {
                 prefixWord.append(letter);
@@ -92,8 +97,6 @@ public class Trie {
             }
         }
         if (thisNode.isLast) {
-//            String stringWord = prefixWord.toString();
-//            listOfWords.add(stringWord);
             listOfWords.add(String.valueOf(prefixWord));
         }
         getAllWords(thisNode, prefixWord, listOfWords);
@@ -109,9 +112,13 @@ public class Trie {
         }
         for (int i = 0; i < word.toCharArray().length; i++) {
             char letter = word.charAt(i);
-            if (thisNode.subNode.containsKey(letter)) {
-                thisNode = thisNode.subNode.get(letter);//поиск по ключу(value) или null
-            } else break;
+//            if (thisNode.subNode.containsKey(letter)) {
+//                thisNode = thisNode.subNode.get(letter);
+//            } else break;
+
+            thisNode = thisNode.subNode.get(letter);
+            thisNode.subNode = null;
+
         }
         thisNode.isLast = false;
     }
