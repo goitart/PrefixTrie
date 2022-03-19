@@ -14,7 +14,7 @@ import java.util.*;
 
 class Trie {
 
-    public static class Node {
+    static class Node {
         char letter;
         HashMap<Character, Node> subNode;
         boolean isLast;
@@ -43,15 +43,11 @@ class Trie {
             char letter = string.charAt(i);
             if (thisNode.subNode.containsKey(letter)) {
                 thisNode = thisNode.subNode.get(letter);
-            }
-            else {
+            } else {
                 Node nextNode;
                 thisNode.subNode.putIfAbsent(letter, nextNode = new Node(letter));
                 thisNode = nextNode;
             }
-
-//            Node nextNode;
-
         }
         thisNode.isLast = true;
     }
@@ -66,7 +62,7 @@ class Trie {
         return thisNode.isLast;
     }
 
-    public void getAllWords(Node thisNode, StringBuilder word, HashSet<String> words) {
+    private void getAllWords(Node thisNode, StringBuilder word, HashSet<String> words) {
         for (char s : thisNode.subNode.keySet()) {
             word.append(s);
             if (thisNode.subNode.get(s).isLast) {
@@ -82,7 +78,7 @@ class Trie {
         Node thisNode = root;
         StringBuilder prefixWord = new StringBuilder();
         HashSet<String> emptyList = new HashSet<>();
-        HashSet<String> listOfWords = new HashSet<>();
+        HashSet<String> setOfWords = new HashSet<>();
         if (prefix.length() == 0) {
             return emptyList;
         }
@@ -90,17 +86,16 @@ class Trie {
         for (char letter : prefix.toCharArray()) {
             if (thisNode.subNode.containsKey(letter)) {
                 prefixWord.append(letter);
-                String stringWord = prefixWord.toString();
                 thisNode = thisNode.subNode.get(letter);
             } else {
                 return emptyList;
             }
         }
         if (thisNode.isLast) {
-            listOfWords.add(String.valueOf(prefixWord));
+            setOfWords.add(String.valueOf(prefixWord));
         }
-        getAllWords(thisNode, prefixWord, listOfWords);
-        return listOfWords;
+        getAllWords(thisNode, prefixWord, setOfWords);
+        return setOfWords;
     }
 
 
@@ -110,16 +105,30 @@ class Trie {
         if (word.isEmpty()) {
             return;
         }
+
         for (int i = 0; i < word.toCharArray().length; i++) {
             char letter = word.charAt(i);
-//            if (thisNode.subNode.containsKey(letter)) {
-//                thisNode = thisNode.subNode.get(letter);
-//            } else break;
-
-            thisNode = thisNode.subNode.get(letter);
-            thisNode.subNode = null;
-
+            if (thisNode.subNode.containsKey(letter)) {
+                thisNode = thisNode.subNode.get(letter);
+            }
         }
         thisNode.isLast = false;
+
+        char let = 0;
+        int num = word.toCharArray().length;
+        for (int k = 0; k < word.toCharArray().length; k++) {
+            for (int i = 0; i < num - 1; i++) {
+                char letter = word.charAt(i);
+                if (thisNode.subNode.containsKey(letter)) {
+                    thisNode = thisNode.subNode.get(letter);
+                    let = letter;
+                } else break;
+            }
+            num--;
+            if (thisNode.subNode.size() <= 1) {
+                thisNode.subNode.remove(let);
+                thisNode = root;
+            }
+        }
     }
 }

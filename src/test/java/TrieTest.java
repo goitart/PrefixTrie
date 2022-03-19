@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 import java.util.List;
 import java.util.Set;
@@ -14,31 +16,21 @@ public class TrieTest {
         newTrie.addWord("sponge");
 
         newTrie.addWord("dog");
-
+        assertTrue(newTrie.findWord("dog"));
         newTrie.addWord("portal");
-
         assertTrue(newTrie.findWord("portal"));
-
         newTrie.addWord("dog");
-
         newTrie.addWord("");
 
-
-
         assertFalse(newTrie.findWord("spo"));
-
         assertTrue(newTrie.findWord("dog"));
-
         assertTrue(newTrie.findWord("sponge"));
-
         assertFalse(newTrie.findWord("d"));
-
         assertFalse(newTrie.findWord("porta"));
-
         assertFalse(newTrie.findWord(""));
 
     }
-    //Элементы в list стоят в другом порядке, из-за этого тест не проходит.
+
     @Test
     void testFindWithPrefix() {
         Trie newTrie = new Trie();
@@ -53,10 +45,12 @@ public class TrieTest {
         newTrie.addWord("death");
 
         assertEquals(Set.of(), newTrie.findWithPrefix("k"));
-        assertEquals(Set.of("pop", "port", "portport","portal"), newTrie.findWithPrefix("po"));
+        assertEquals(Set.of("pop", "port", "portport", "portal"), newTrie.findWithPrefix("po"));
         assertEquals(Set.of("dog", "death", "dogdog"), newTrie.findWithPrefix("d"));
         assertEquals(Set.of(), newTrie.findWithPrefix(""));
+        assertEquals(Set.of("port", "portport", "portal"), newTrie.findWithPrefix("port"));
     }
+
     @Test
     void testDelete() {
         Trie newTrie = new Trie();
@@ -73,15 +67,18 @@ public class TrieTest {
         assertTrue(newTrie.findWord("dog"));
         newTrie.addWord("");
 
+        newTrie.delete("joke");
+        assertFalse(newTrie.findWord("joke"));
         newTrie.delete("port");
         assertFalse(newTrie.findWord("port"));
+        assertFalse(newTrie.findWord("ort"));
+        assertFalse(newTrie.findWord("rt"));
+        assertFalse(newTrie.findWord("t"));
         newTrie.delete("");
         newTrie.delete("dog");
         assertFalse(newTrie.findWord("dog"));
         newTrie.delete("dog");
         assertFalse(newTrie.findWord("dog"));
-        newTrie.delete("joke");
-        assertFalse(newTrie.findWord("joke"));
 
         assertFalse(newTrie.findWord("port"));
         assertFalse(newTrie.findWord("spo"));
@@ -92,5 +89,10 @@ public class TrieTest {
         assertFalse(newTrie.findWord("porta"));
         assertFalse(newTrie.findWord(""));
         assertFalse(newTrie.findWord("joke"));
+
+        newTrie.addWord("apple");
+        assertTrue(newTrie.findWord("apple"));
+        newTrie.delete("apple");
+        assertFalse(newTrie.findWord("apple"));
     }
 }
