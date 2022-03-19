@@ -32,7 +32,6 @@ class Trie {
         root = new Node(' ');
     }
 
-
     public void addWord(String string) {
         Node thisNode = root;
         if (string.isEmpty()) {
@@ -71,7 +70,6 @@ class Trie {
             getAllWords(thisNode.subNode.get(s), word, words);
             word.deleteCharAt(word.length() - 1);
         }
-
     }
 
     public HashSet<String> findWithPrefix(String prefix) {
@@ -98,8 +96,6 @@ class Trie {
         return setOfWords;
     }
 
-
-    // delete удаляет не узлы, а указатель на конец слова
     public void delete(String word) {
         Node thisNode = root;
         if (word.isEmpty()) {
@@ -113,7 +109,6 @@ class Trie {
             }
         }
         thisNode.isLast = false;
-
         char let = 0;
         int num = word.toCharArray().length;
         for (int k = 0; k < word.toCharArray().length; k++) {
